@@ -687,11 +687,11 @@
       </div>
       <div class="summary-card">
         <div class="summary-label">10일 이내</div>
-        <div class="summary-value" id="expiring30Count">-</div>
+        <div class="summary-value" id="expiring10Count">-</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">30일 이내</div>
-        <div class="summary-value" id="expiring90Count">-</div>
+        <div class="summary-value" id="expiring30Count">-</div>
       </div>
     </section>
 
@@ -969,26 +969,26 @@
       document.getElementById('totalKrw').textContent = formatKrw(summary.totalKrw);
       document.getElementById('totalCount').textContent = formatNumber(summary.count);
       document.getElementById('expiredCount').textContent = formatNumber(summary.expired);
-document.getElementById('expiring10Count').textContent = formatNumber(summary.expiring10);
-document.getElementById('expiring30Count').textContent = formatNumber(summary.expiring30);
+      document.getElementById('expiring10Count').textContent = formatNumber(summary.expiring10);
+      document.getElementById('expiring30Count').textContent = formatNumber(summary.expiring30);
     }
 
     function buildClientSummary(items) {
-const summary = {
-  totalKrw: 0,
-  count: items.length,
-  expired: 0,
-  expiring10: 0,
-  expiring30: 0
-};
+      const summary = {
+        totalKrw: 0,
+        count: items.length,
+        expired: 0,
+        expiring10: 0,
+        expiring30: 0
+      };
 
-items.forEach(item => {
-  summary.totalKrw += toNumber(item.totalKrw);
+      items.forEach(item => {
+        summary.totalKrw += toNumber(item.totalKrw);
 
-  if (item.status === '만료') summary.expired++;
-  else if (item.status === '10일 이내') summary.expiring10++;
-  else if (item.status === '30일 이내') summary.expiring30++;
-});
+        if (item.status === '만료') summary.expired++;
+        else if (item.status === '10일 이내') summary.expiring10++;
+        else if (item.status === '30일 이내') summary.expiring30++;
+      });
 
       return summary;
     }
@@ -1113,19 +1113,19 @@ items.forEach(item => {
       }
     }
 
-function statusBadge(status) {
-  if (status === '정상') {
-    return '<span class="status-normal-dash">-</span>';
-  }
+    function statusBadge(status) {
+      if (status === '정상') {
+        return '<span class="status-normal-dash">-</span>';
+      }
 
-  let cls = 'badge-unknown';
+      let cls = 'badge-unknown';
 
-  if (status === '10일 이내') cls = 'badge-10';
-  else if (status === '30일 이내') cls = 'badge-30';
-  else if (status === '만료') cls = 'badge-expired';
+      if (status === '10일 이내') cls = 'badge-10';
+      else if (status === '30일 이내') cls = 'badge-30';
+      else if (status === '만료') cls = 'badge-expired';
 
-  return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
-}
+      return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
+    }
 
     function formatDays(value) {
       if (value === '' || value === null || value === undefined || isNaN(Number(value))) {
