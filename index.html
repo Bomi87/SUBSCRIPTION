@@ -460,11 +460,7 @@
   color: #9a3412;
 }
 
-.status-normal-dash {
-  display: inline-block;
-  color: #6b7280;
-  font-weight: 700;
-}
+
     .detail-box {
       background: #f9fafb;
       border: 1px solid var(--line);
@@ -491,11 +487,7 @@
       margin-top: 12px;
       background: white;
     }
-.status-normal-dash {
-  display: inline-block;
-  color: #6b7280;
-  font-weight: 700;
-}
+
     .detail-section h3 {
       margin: 0 0 8px;
       font-size: 15px;
@@ -705,8 +697,7 @@
   <option value="만료">만료</option>
   <option value="10일 이내">10일 이내</option>
   <option value="30일 이내">30일 이내</option>
-  <option value="정상">정상</option>
-  <option value="확인필요">확인필요</option>
+
 </select>
       <select id="sortSelect">
         <option value="daysAsc">만료 임박순</option>
@@ -763,7 +754,7 @@
     <section class="description-panel">
       <div class="panel-title">
         <h2 id="descriptionTitle">품목 설명</h2>
-        <div class="small-text">PIVOT 시트 A:C 기준</div>
+ 
       </div>
 
       <div class="description-table-wrap">
@@ -1109,19 +1100,19 @@ filteredItems = allItems.filter(item => {
       }
     }
 
-    function statusBadge(status) {
-      if (status === '정상') {
-        return '<span class="status-normal-dash">-</span>';
-      }
+function statusBadge(status) {
+  if (status === '정상') {
+    return '';
+  }
 
-      let cls = 'badge-unknown';
+  let cls = 'badge-unknown';
 
-      if (status === '10일 이내') cls = 'badge-10';
-      else if (status === '30일 이내') cls = 'badge-30';
-      else if (status === '만료') cls = 'badge-expired';
+  if (status === '10일 이내') cls = 'badge-10';
+  else if (status === '30일 이내') cls = 'badge-30';
+  else if (status === '만료') cls = 'badge-expired';
 
-      return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
-    }
+  return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
+}
 
     function formatDays(value) {
       if (value === '' || value === null || value === undefined || isNaN(Number(value))) {
