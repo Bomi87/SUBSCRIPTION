@@ -177,12 +177,12 @@
       height: calc(68vh - 52px);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1000px;
-    }
-
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1120px;
+  table-layout: fixed;
+}
     th,
     td {
       border-bottom: 1px solid var(--line);
@@ -221,21 +221,86 @@
       text-overflow: ellipsis;
     }
 
-    .mini-detail-btn {
-      width: 13px;
-      height: 13px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--black);
-      cursor: pointer;
-      flex: 0 0 auto;
-      padding: 0;
-    }
+ .mini-detail-btn {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  flex: 0 0 auto;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 16px;
+  text-align: center;
+}
 
-    .mini-detail-btn:hover {
-      background: var(--accent);
-    }
+.mini-detail-btn:hover {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+}
+.contract-table th:nth-child(1),
+.contract-table td:nth-child(1) {
+  width: 80px;
+}
 
+.contract-table th:nth-child(2),
+.contract-table td:nth-child(2) {
+  width: 90px;
+}
+
+.contract-table th:nth-child(3),
+.contract-table td:nth-child(3) {
+  width: 390px;
+}
+
+.contract-table th:nth-child(4),
+.contract-table td:nth-child(4) {
+  width: 110px;
+}
+
+.contract-table th:nth-child(5),
+.contract-table td:nth-child(5) {
+  width: 70px;
+}
+
+.contract-table th:nth-child(6),
+.contract-table td:nth-child(6) {
+  width: 70px;
+}
+
+.contract-table th:nth-child(7),
+.contract-table td:nth-child(7) {
+  width: 150px;
+}
+
+.contract-table th:nth-child(8),
+.contract-table td:nth-child(8) {
+  width: 120px;
+}
+
+.contract-table th:nth-child(9),
+.contract-table td:nth-child(9) {
+  width: 120px;
+}
+
+.contract-table th:nth-child(10),
+.contract-table td:nth-child(10) {
+  width: 80px;
+}
+
+.contract-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contract-table .item-cell {
+  max-width: none;
+}
     .badge {
       display: inline-flex;
       align-items: center;
@@ -717,7 +782,7 @@
           <div class="small-text" id="listCount">-</div>
         </div>
         <div class="table-wrap">
-          <table>
+      <table class="contract-table">
             <thead>
               <tr>
                 <th>상태</th>
@@ -997,7 +1062,9 @@ filteredItems = allItems.filter(item => {
           <td>${statusBadge(item.status)}</td>
           <td>${escapeHtml(item.dept || '')}</td>
           <td class="item-cell" title="${escapeHtmlAttr(item.item || '')}">
-            <button class="mini-detail-btn" onclick="openDetail('${escapeJs(item.item)}')" title="상세보기" aria-label="상세보기"></button>
+<button class="mini-detail-btn" onclick="openDetail('${escapeJs(item.item)}')" title="상세보기" aria-label="상세보기">
+  i
+</button>
             <span>${escapeHtml(item.item || '')}</span>
           </td>
           <td class="amount">${formatNumberOrDash(item.unitPrice)}</td>
