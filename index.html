@@ -174,13 +174,13 @@
 
     .table-wrap {
       overflow: auto;
-      max-height: 68vh;
+      height: calc(68vh - 52px);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1120px;
+      min-width: 1000px;
     }
 
     th,
@@ -208,9 +208,32 @@
     }
 
     .item-cell {
-      max-width: 360px;
+      max-width: 420px;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .item-cell span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-detail-btn {
+      width: 13px;
+      height: 13px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--black);
+      cursor: pointer;
+      flex: 0 0 auto;
+      padding: 0;
+    }
+
+    .mini-detail-btn:hover {
+      background: var(--accent);
     }
 
     .badge {
@@ -272,7 +295,7 @@
 
     .priority-list {
       padding: 10px 12px 14px;
-      max-height: 340px;
+      height: calc(68vh - 52px);
       overflow: auto;
     }
 
@@ -298,41 +321,21 @@
     .priority-days {
       text-align: right;
       font-weight: 800;
-      color: var(--danger);
       font-size: 13px;
     }
 
-    .dept-cards {
-      padding: 12px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
+    .priority-red {
+      color: #dc2626;
     }
 
-    .dept-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      cursor: pointer;
-      background: #fff;
+    .priority-orange {
+      color: #f97316;
     }
 
-    .dept-card:hover {
-      border-color: var(--accent);
+    .priority-black {
+      color: #111827;
     }
 
-    .dept-name {
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .dept-meta {
-      color: var(--muted);
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
 
     .description-panel {
       margin-top: 14px;
@@ -548,7 +551,13 @@
       }
 
       .table-wrap {
+        height: auto;
         max-height: none;
+      }
+
+      .priority-list {
+        height: auto;
+        max-height: 60vh;
       }
 
       th,
@@ -572,6 +581,7 @@
       .toolbar,
       .side-panel,
       .detail-btn,
+      .mini-detail-btn,
       .modal,
       .footer {
         display: none !important;
@@ -599,6 +609,7 @@
 
       .table-wrap,
       .description-table-wrap {
+        height: auto;
         max-height: none;
         overflow: visible;
       }
@@ -707,13 +718,11 @@
                 <th>계약시작</th>
                 <th>계약종료</th>
                 <th class="amount">비중</th>
-                <th class="amount">남은 일자</th>
-                <th>상세</th>
               </tr>
             </thead>
             <tbody id="tableBody">
               <tr>
-                <td colspan="12" class="loading">불러오는 중...</td>
+                <td colspan="10" class="loading">불러오는 중...</td>
               </tr>
             </tbody>
           </table>
@@ -730,23 +739,13 @@
             <div class="loading">불러오는 중...</div>
           </div>
         </div>
-
-        <div class="panel">
-          <div class="panel-title">
-            <h2>부서별 계약</h2>
-            <div class="small-text">클릭 시 필터</div>
-          </div>
-          <div class="dept-cards" id="deptCards">
-            <div class="loading">불러오는 중...</div>
-          </div>
-        </div>
       </aside>
     </section>
 
     <section class="description-panel">
       <div class="panel-title">
         <h2 id="descriptionTitle">품목 설명</h2>
-        <div class="small-text">PIVOT 시트 AV:AX 기준</div>
+        <div class="small-text">PIVOT 시트 A:C 기준</div>
       </div>
 
       <div class="description-table-wrap">
@@ -879,15 +878,12 @@
 
     function setLoading() {
       document.getElementById('tableBody').innerHTML =
-        '<tr><td colspan="12" class="loading">불러오는 중...</td></tr>';
+        '<tr><td colspan="10" class="loading">불러오는 중...</td></tr>';
 
       document.getElementById('descriptionBody').innerHTML =
         '<tr><td colspan="3" class="loading">불러오는 중...</td></tr>';
 
       document.getElementById('priorityList').innerHTML =
-        '<div class="loading">불러오는 중...</div>';
-
-      document.getElementById('deptCards').innerHTML =
         '<div class="loading">불러오는 중...</div>';
     }
 
@@ -934,7 +930,6 @@
       renderTable(filteredItems);
       renderDescriptions(filteredItems);
       renderPriorityList(filteredItems);
-      renderDeptCards(allItems);
       updateTitle();
     }
 
@@ -985,7 +980,7 @@
       document.getElementById('listCount').textContent = `${items.length}건`;
 
       if (!items.length) {
-        tbody.innerHTML = '<tr><td colspan="12" class="empty">표시할 계약 데이터가 없습니다.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="empty">표시할 계약 데이터가 없습니다.</td></tr>';
         return;
       }
 
@@ -993,7 +988,10 @@
         <tr>
           <td>${statusBadge(item.status)}</td>
           <td>${escapeHtml(item.dept || '')}</td>
-          <td class="item-cell" title="${escapeHtmlAttr(item.item || '')}">${escapeHtml(item.item || '')}</td>
+          <td class="item-cell" title="${escapeHtmlAttr(item.item || '')}">
+            <button class="mini-detail-btn" onclick="openDetail('${escapeJs(item.item)}')" title="상세보기" aria-label="상세보기"></button>
+            <span>${escapeHtml(item.item || '')}</span>
+          </td>
           <td class="amount">${formatNumberOrDash(item.unitPrice)}</td>
           <td>${escapeHtml(item.currency || '')}</td>
           <td class="amount">${formatNumberOrDash(item.qty)}</td>
@@ -1001,10 +999,6 @@
           <td>${escapeHtml(item.startDate || '')}</td>
           <td>${escapeHtml(item.endDate || '')}</td>
           <td class="amount">${escapeHtml(item.weightDisplay || '')}</td>
-          <td class="amount">${formatDays(item.daysLeft)}</td>
-          <td>
-            <button class="detail-btn" onclick="openDetail('${escapeJs(item.item)}')">보기</button>
-          </td>
         </tr>
       `).join('');
     }
@@ -1033,62 +1027,33 @@
       const rows = items
         .filter(item => item.daysLeft !== '' && item.daysLeft !== null && item.daysLeft !== undefined)
         .slice()
-        .sort((a, b) => normalizeDays(a.daysLeft) - normalizeDays(b.daysLeft))
-        .slice(0, 12);
+        .sort((a, b) => normalizeDays(a.daysLeft) - normalizeDays(b.daysLeft));
 
       if (!rows.length) {
         el.innerHTML = '<div class="empty">표시할 우선순위가 없습니다.</div>';
         return;
       }
 
-      el.innerHTML = rows.map(item => `
-        <div class="priority-item" onclick="openDetail('${escapeJs(item.item)}')">
-          <div class="priority-name">${escapeHtml(item.item || '')}</div>
-          <div class="priority-days">${formatDays(item.daysLeft)}</div>
-        </div>
-      `).join('');
-    }
+      el.innerHTML = rows.map(item => {
+        const dayClass = getPriorityDayClass(item.daysLeft);
 
-    function renderDeptCards(items) {
-      const el = document.getElementById('deptCards');
-      const map = {};
-
-      items.forEach(item => {
-        const dept = item.dept || '미분류';
-
-        if (!map[dept]) {
-          map[dept] = {
-            count: 0,
-            totalKrw: 0
-          };
-        }
-
-        map[dept].count++;
-        map[dept].totalKrw += toNumber(item.totalKrw);
-      });
-
-      const rows = Object.keys(map).sort((a, b) => a.localeCompare(b, 'ko'));
-
-      if (!rows.length) {
-        el.innerHTML = '<div class="empty">부서 데이터가 없습니다.</div>';
-        return;
-      }
-
-      el.innerHTML = rows.map(dept => `
-        <div class="dept-card" onclick="setDeptFilter('${escapeJs(dept)}')">
-          <div class="dept-name">${escapeHtml(dept)}</div>
-          <div class="dept-meta">
-            <span>${formatNumber(map[dept].count)}건</span>
-            <span>${formatKrw(map[dept].totalKrw)}</span>
+        return `
+          <div class="priority-item" onclick="openDetail('${escapeJs(item.item)}')">
+            <div class="priority-name">${escapeHtml(item.item || '')}</div>
+            <div class="priority-days ${dayClass}">${formatDays(item.daysLeft)}</div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    function setDeptFilter(dept) {
-      document.getElementById('deptFilter').value = dept;
-      applyFilters();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function getPriorityDayClass(days) {
+      const n = Number(days);
+
+      if (isNaN(n)) return 'priority-black';
+      if (n <= 10) return 'priority-red';
+      if (n <= 30) return 'priority-orange';
+
+      return 'priority-black';
     }
 
     function updateTitle() {
@@ -1212,15 +1177,12 @@
 
     function renderError(message) {
       document.getElementById('tableBody').innerHTML =
-        `<tr><td colspan="12" class="empty">${escapeHtml(message)}</td></tr>`;
+        `<tr><td colspan="10" class="empty">${escapeHtml(message)}</td></tr>`;
 
       document.getElementById('descriptionBody').innerHTML =
         `<tr><td colspan="3" class="empty">${escapeHtml(message)}</td></tr>`;
 
       document.getElementById('priorityList').innerHTML =
-        `<div class="empty">${escapeHtml(message)}</div>`;
-
-      document.getElementById('deptCards').innerHTML =
         `<div class="empty">${escapeHtml(message)}</div>`;
     }
   </script>
