@@ -450,7 +450,21 @@
       gap: 10px;
       margin-bottom: 14px;
     }
+.badge-10 {
+  background: #fee2e2;
+  color: #991b1b;
+}
 
+.badge-30 {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.status-normal-dash {
+  display: inline-block;
+  color: #6b7280;
+  font-weight: 700;
+}
     .detail-box {
       background: #f9fafb;
       border: 1px solid var(--line);
@@ -672,11 +686,11 @@
         <div class="summary-value" id="expiredCount">-</div>
       </div>
       <div class="summary-card">
-        <div class="summary-label">30일 이내</div>
+        <div class="summary-label">10일 이내</div>
         <div class="summary-value" id="expiring30Count">-</div>
       </div>
       <div class="summary-card">
-        <div class="summary-label">90일 이내</div>
+        <div class="summary-label">30일 이내</div>
         <div class="summary-value" id="expiring90Count">-</div>
       </div>
     </section>
@@ -686,14 +700,14 @@
       <select id="deptFilter">
         <option value="">전체 부서</option>
       </select>
-      <select id="statusFilter">
-        <option value="">전체 상태</option>
-        <option value="만료">만료</option>
-        <option value="30일 이내">30일 이내</option>
-        <option value="90일 이내">90일 이내</option>
-        <option value="정상">정상</option>
-        <option value="확인필요">확인필요</option>
-      </select>
+    <select id="statusFilter">
+  <option value="">전체 상태</option>
+  <option value="만료">만료</option>
+  <option value="10일 이내">10일 이내</option>
+  <option value="30일 이내">30일 이내</option>
+  <option value="정상">정상</option>
+  <option value="확인필요">확인필요</option>
+</select>
       <select id="sortSelect">
         <option value="daysAsc">만료 임박순</option>
         <option value="costDesc">비용 높은순</option>
@@ -820,7 +834,7 @@
     /****************************************************
      * 여기에 Apps Script 배포 URL 입력
      ****************************************************/
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxUVBIonnM8GqkoTEIIAEoaZGdfjQLMbg4W808SZKqA59MPk-OKY-IGwC7BG6o72rUR/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbziu1De7KzcQbdAz0BSkWipSIECDpbjTEeKIPCIBg8BgDLQ6Ch9bR_IvDx_J4WxI7lS/exec';
 
     let allItems = [];
     let filteredItems = [];
@@ -955,26 +969,26 @@
       document.getElementById('totalKrw').textContent = formatKrw(summary.totalKrw);
       document.getElementById('totalCount').textContent = formatNumber(summary.count);
       document.getElementById('expiredCount').textContent = formatNumber(summary.expired);
-      document.getElementById('expiring30Count').textContent = formatNumber(summary.expiring30);
-      document.getElementById('expiring90Count').textContent = formatNumber(summary.expiring90);
+document.getElementById('expiring10Count').textContent = formatNumber(summary.expiring10);
+document.getElementById('expiring30Count').textContent = formatNumber(summary.expiring30);
     }
 
     function buildClientSummary(items) {
-      const summary = {
-        totalKrw: 0,
-        count: items.length,
-        expired: 0,
-        expiring30: 0,
-        expiring90: 0
-      };
+const summary = {
+  totalKrw: 0,
+  count: items.length,
+  expired: 0,
+  expiring10: 0,
+  expiring30: 0
+};
 
-      items.forEach(item => {
-        summary.totalKrw += toNumber(item.totalKrw);
+items.forEach(item => {
+  summary.totalKrw += toNumber(item.totalKrw);
 
-        if (item.status === '만료') summary.expired++;
-        else if (item.status === '30일 이내') summary.expiring30++;
-        else if (item.status === '90일 이내') summary.expiring90++;
-      });
+  if (item.status === '만료') summary.expired++;
+  else if (item.status === '10일 이내') summary.expiring10++;
+  else if (item.status === '30일 이내') summary.expiring30++;
+});
 
       return summary;
     }
@@ -1099,14 +1113,14 @@
       }
     }
 
- function statusBadge(status) {
+function statusBadge(status) {
   if (status === '정상') {
     return '<span class="status-normal-dash">-</span>';
   }
 
   let cls = 'badge-unknown';
 
-  if (status === '90일 이내') cls = 'badge-90';
+  if (status === '10일 이내') cls = 'badge-10';
   else if (status === '30일 이내') cls = 'badge-30';
   else if (status === '만료') cls = 'badge-expired';
 
