@@ -492,7 +492,10 @@
       margin: 0 0 8px;
       font-size: 15px;
     }
-
+#modalPeriod {
+  line-height: 1.45;
+  word-break: keep-all;
+}
     .detail-section p {
       margin: 0;
       white-space: pre-line;
@@ -1077,8 +1080,8 @@ filteredItems = allItems.filter(item => {
       document.getElementById('modalTitle').textContent = item.item || '품목 상세';
       document.getElementById('modalDept').textContent = item.dept || '-';
       document.getElementById('modalCost').textContent = formatKrwOrDash(item.totalKrw);
-      document.getElementById('modalPeriod').textContent =
-        `${item.startDate || '-'} ~ ${item.endDate || '-'}`;
+document.getElementById('modalPeriod').innerHTML =
+  `${escapeHtml(item.startDate || '-')} ~<br>${escapeHtml(item.endDate || '-')}`;
       document.getElementById('modalDays').textContent = formatDays(item.daysLeft);
 
       document.getElementById('modalDescription').textContent =
