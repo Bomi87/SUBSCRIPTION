@@ -477,7 +477,11 @@
       margin-top: 12px;
       background: white;
     }
-
+.status-normal-dash {
+  display: inline-block;
+  color: #6b7280;
+  font-weight: 700;
+}
     .detail-section h3 {
       margin: 0 0 8px;
       font-size: 15px;
@@ -1095,16 +1099,19 @@
       }
     }
 
-    function statusBadge(status) {
-      let cls = 'badge-unknown';
+ function statusBadge(status) {
+  if (status === '정상') {
+    return '<span class="status-normal-dash">-</span>';
+  }
 
-      if (status === '정상') cls = 'badge-normal';
-      else if (status === '90일 이내') cls = 'badge-90';
-      else if (status === '30일 이내') cls = 'badge-30';
-      else if (status === '만료') cls = 'badge-expired';
+  let cls = 'badge-unknown';
 
-      return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
-    }
+  if (status === '90일 이내') cls = 'badge-90';
+  else if (status === '30일 이내') cls = 'badge-30';
+  else if (status === '만료') cls = 'badge-expired';
+
+  return `<span class="badge ${cls}">${escapeHtml(status || '확인필요')}</span>`;
+}
 
     function formatDays(value) {
       if (value === '' || value === null || value === undefined || isNaN(Number(value))) {
