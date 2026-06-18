@@ -173,27 +173,23 @@
     }
 
     .table-wrap {
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: auto;
       height: calc(68vh - 52px);
     }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 0;
+  min-width: 1120px;
   table-layout: fixed;
 }
-
     th,
     td {
       border-bottom: 1px solid var(--line);
-      padding: 8px 8px;
+      padding: 9px 10px;
       font-size: 13px;
-      white-space: normal;
+      white-space: nowrap;
       vertical-align: middle;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
     }
 
     th {
@@ -212,23 +208,17 @@ table {
     }
 
     .item-cell {
-      max-width: none;
-      overflow: visible;
-      text-overflow: clip;
+      max-width: 420px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      white-space: normal;
-      line-height: 1.35;
+      align-items: center;
+      gap: 8px;
     }
 
     .item-cell span {
-      min-width: 0;
-      overflow: visible;
-      text-overflow: clip;
-      white-space: normal;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
  .mini-detail-btn {
@@ -255,66 +245,57 @@ table {
 }
 .contract-table th:nth-child(1),
 .contract-table td:nth-child(1) {
-  width: 7%;
+  width: 80px;
 }
 
 .contract-table th:nth-child(2),
 .contract-table td:nth-child(2) {
-  width: 8%;
+  width: 90px;
 }
 
 .contract-table th:nth-child(3),
 .contract-table td:nth-child(3) {
-  width: 24%;
+  width: 390px;
 }
 
 .contract-table th:nth-child(4),
 .contract-table td:nth-child(4) {
-  width: 9%;
+  width: 110px;
 }
 
 .contract-table th:nth-child(5),
 .contract-table td:nth-child(5) {
-  width: 6%;
+  width: 70px;
 }
 
 .contract-table th:nth-child(6),
 .contract-table td:nth-child(6) {
-  width: 6%;
+  width: 70px;
 }
 
 .contract-table th:nth-child(7),
 .contract-table td:nth-child(7) {
-  width: 13%;
+  width: 150px;
 }
 
 .contract-table th:nth-child(8),
 .contract-table td:nth-child(8) {
-  width: 9%;
+  width: 120px;
 }
 
 .contract-table th:nth-child(9),
 .contract-table td:nth-child(9) {
-  width: 9%;
+  width: 120px;
 }
 
 .contract-table th:nth-child(10),
 .contract-table td:nth-child(10) {
-  width: 9%;
+  width: 80px;
 }
 
 .contract-table td {
   overflow: hidden;
-  text-overflow: clip;
-}
-
-.contract-table td:nth-child(3) {
-  overflow: visible;
-}
-
-.contract-table .amount {
-  white-space: normal;
-  word-break: break-word;
+  text-overflow: ellipsis;
 }
 
 .contract-table .item-cell {
@@ -818,18 +799,7 @@ table {
 
   .contract-table td {
     overflow: hidden;
-    text-overflow: clip;
-    white-space: normal;
-    word-break: keep-all;
-    overflow-wrap: anywhere;
-  }
-
-  .contract-table td:nth-child(3),
-  .contract-table .item-cell,
-  .contract-table .item-cell span {
-    overflow: visible !important;
-    text-overflow: clip !important;
-    white-space: normal !important;
+    text-overflow: ellipsis;
   }
 
   @page {
