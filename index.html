@@ -696,7 +696,7 @@
     </section>
 
     <section class="toolbar">
-      <input id="searchInput" placeholder="품목 / 설명 / 품의서 검색" />
+    <input id="searchInput" placeholder="품목 검색" />
       <select id="deptFilter">
         <option value="">전체 부서</option>
       </select>
@@ -927,21 +927,17 @@
       const status = document.getElementById('statusFilter').value;
       const sortValue = document.getElementById('sortSelect').value;
 
-      filteredItems = allItems.filter(item => {
-        const searchTarget = [
-          item.item,
-          item.dept,
-          item.description,
-          item.trackingTitle
-        ].join(' ').toLowerCase();
+filteredItems = allItems.filter(item => {
+  const itemName = String(item.item || '').toLowerCase();
 
-        const matchKeyword = !keyword || searchTarget.includes(keyword);
-        const matchDept = !dept || item.dept === dept;
-        const matchStatus = !status || item.status === status;
+  // 기본 검색은 품목명만 대상으로 함
+  const matchKeyword = !keyword || itemName.includes(keyword);
 
-        return matchKeyword && matchDept && matchStatus;
-      });
+  const matchDept = !dept || item.dept === dept;
+  const matchStatus = !status || item.status === status;
 
+  return matchKeyword && matchDept && matchStatus;
+});
       sortItems(filteredItems, sortValue);
 
       renderSummary(filteredItems);
