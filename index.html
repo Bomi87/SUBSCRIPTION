@@ -449,7 +449,17 @@ table {
       color: var(--muted);
       font-size: 12px;
       margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
       text-align: right;
+    }
+
+    #fxInfo {
+      font-weight: 700;
+      color: #8a6a00;
     }
 
     .modal {
@@ -985,7 +995,10 @@ table {
       </div>
     </section>
 
-    <div class="footer" id="updatedAt"></div>
+    <div class="footer">
+      <span id="fxInfo"></span>
+      <span id="updatedAt"></span>
+    </div>
   </main>
 
   <div id="detailModal" class="modal hidden" onclick="modalBackdropClose(event)">
@@ -1075,6 +1088,12 @@ table {
         setupDeptFilter(response.depts || []);
         applyFilters();
 
+        const usdRate = response.exchangeRates && response.exchangeRates.USD;
+        const eurRate = response.exchangeRates && response.exchangeRates.EUR;
+
+        document.getElementById('fxInfo').textContent =
+          buildFxText(usdRate, eurRate);
+
         document.getElementById('updatedAt').textContent =
           '업데이트: ' + formatDateTime(response.generatedAt);
       };
@@ -1104,6 +1123,9 @@ table {
 
       document.getElementById('priorityList').innerHTML =
         '<div class="loading">불러오는 중...</div>';
+
+      document.getElementById('fxInfo').textContent = '';
+      document.getElementById('updatedAt').textContent = '';
     }
 
     function setupDeptFilter(depts) {
@@ -1356,6 +1378,34 @@ function statusBadge(status) {
       }
 
       return Number(value).toLocaleString('ko-KR');
+    }
+
+    function buildFxText(usd, eur) {
+      const parts = [];
+
+      if (isValidNumber(usd)) {
+        parts.push(`적용환율 USD: ${formatFx(usd)}원`);
+      }
+
+      if (isValidNumber(eur)) {
+        parts.push(`EUR: ${formatFx(eur)}원`);
+      }
+
+      return parts.length ? parts.join(' / ') : '적용환율 정보 없음';
+    }
+
+    function formatFx(value) {
+      return Number(value).toLocaleString('ko-KR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function isValidNumber(value) {
+      return value !== null &&
+        value !== undefined &&
+        value !== '' &&
+        !isNaN(Number(value));
     }
 
     function formatDateTime(value) {
