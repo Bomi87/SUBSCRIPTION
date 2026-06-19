@@ -997,7 +997,6 @@ table {
 
     <div class="footer">
       <span id="fxInfo"></span>
-      <span id="updatedAt"></span>
     </div>
   </main>
 
@@ -1094,8 +1093,6 @@ table {
         document.getElementById('fxInfo').textContent =
           buildFxText(usdRate, eurRate);
 
-        document.getElementById('updatedAt').textContent =
-          '업데이트: ' + formatDateTime(response.generatedAt);
       };
 
       const script = document.createElement('script');
@@ -1125,7 +1122,6 @@ table {
         '<div class="loading">불러오는 중...</div>';
 
       document.getElementById('fxInfo').textContent = '';
-      document.getElementById('updatedAt').textContent = '';
     }
 
     function setupDeptFilter(depts) {
