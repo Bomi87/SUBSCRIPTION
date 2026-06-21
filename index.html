@@ -875,7 +875,7 @@ table {
 <body>
   <header>
     <div class="header-inner">
-      <h1 id="pageTitle">SK 항공본부 계약현황</h1>
+      <h1 id="pageTitle">항공본부 계약현황</h1>
       <div class="header-actions">
         <button class="top-btn" onclick="refreshData()">새로고침</button>
         <button class="top-btn" onclick="window.print()">PDF 저장 / 인쇄</button>
@@ -1293,7 +1293,7 @@ filteredItems = allItems.filter(item => {
 
     function updateTitle() {
       const dept = document.getElementById('deptFilter').value;
-      const title = dept ? `${dept} 계약현황` : 'SK 항공본부 계약현황';
+      const title = dept ? `${dept} 계약현황` : '항공본부 계약현황';
 
       document.getElementById('pageTitle').textContent = title;
       document.getElementById('descriptionTitle').textContent = dept ? `${dept} 품목 설명` : '품목 설명';
