@@ -873,6 +873,59 @@ table {
 </head>
 
 <body>
+  <div id="authScreen" style="
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:#f3f4f6;
+    color:#1f2937;
+    font-family:Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+  ">
+    Google 계정 승인 확인 중...
+  </div>
+
+  <div id="appRoot" style="display:none;">
+  <div id="passwordGate" class="modal">
+    <div class="modal-box" style="width:min(520px,100%);">
+      <div class="modal-header">
+        <h2>항공본부 계약현황</h2>
+      </div>
+      <div class="modal-body">
+        <div style="color:#6b7280;font-size:14px;line-height:1.6;margin-bottom:14px;">
+          비밀번호 입력 후 계약현황을 조회할 수 있습니다.
+        </div>
+        <input
+          id="appPassword"
+          type="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+          style="height:48px;"
+        />
+        <div id="passwordMsg" style="margin-top:10px;color:#dc2626;font-size:13px;"></div>
+        <button
+          type="button"
+          onclick="unlockContractApp()"
+          style="
+            width:100%;
+            height:46px;
+            margin-top:14px;
+            border:0;
+            border-radius:10px;
+            background:#111827;
+            color:white;
+            font-weight:800;
+            cursor:pointer;
+          "
+        >
+          Enter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="securedContent" style="display:none;">
   <header>
     <div class="header-inner">
       <h1 id="pageTitle">항공본부 계약현황</h1>
@@ -1051,11 +1104,125 @@ table {
 
     let allItems = [];
     let filteredItems = [];
+    let CONTRACT_APP_AUTH_STARTED = false;
+    let CONTRACT_APP_UNLOCKED = false;
 
     document.addEventListener('DOMContentLoaded', () => {
       bindEvents();
+
+      // 데이터는 인증 전에도 백그라운드에서 미리 로딩
       loadData(false);
+
+      const passwordInput = document.getElementById('appPassword');
+
+      if (passwordInput) {
+        passwordInput.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            unlockContractApp();
+          }
+        });
+      }
     });
+
+    function startContractAppAfterGoogleAuth() {
+      if (CONTRACT_APP_AUTH_STARTED) {
+        return;
+      }
+
+      CONTRACT_APP_AUTH_STARTED = true;
+
+      const authScreen = document.getElementById('authScreen');
+      const appRoot = document.getElementById('appRoot');
+      const passwordGate = document.getElementById('passwordGate');
+
+      if (authScreen) {
+        authScreen.style.display = 'none';
+      }
+
+      if (appRoot) {
+        appRoot.style.display = 'block';
+      }
+
+      sessionStorage.removeItem('contractPasswordApproved');
+
+      if (passwordGate) {
+        passwordGate.classList.remove('hidden');
+      }
+
+      window.setTimeout(() => {
+        const passwordInput = document.getElementById('appPassword');
+        if (passwordInput) passwordInput.focus();
+      }, 100);
+    }
+
+    function unlockContractApp() {
+      const passwordInput = document.getElementById('appPassword');
+      const passwordMsg = document.getElementById('passwordMsg');
+      const password = String(passwordInput ? passwordInput.value : '')
+        .trim()
+        .toUpperCase();
+
+      const correctPassword = 'HL8080';
+
+      if (passwordMsg) {
+        passwordMsg.textContent = '';
+      }
+
+      if (!password) {
+        if (passwordMsg) {
+          passwordMsg.textContent = '비밀번호를 입력해 주세요.';
+        }
+        return;
+      }
+
+      if (password !== correctPassword) {
+        if (passwordMsg) {
+          passwordMsg.textContent = '비밀번호가 올바르지 않습니다.';
+        }
+
+        if (passwordInput) {
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+        return;
+      }
+
+      CONTRACT_APP_UNLOCKED = true;
+      sessionStorage.setItem('contractPasswordApproved', 'true');
+
+      const passwordGate = document.getElementById('passwordGate');
+      const securedContent = document.getElementById('securedContent');
+
+      if (passwordGate) {
+        passwordGate.classList.add('hidden');
+      }
+
+      if (securedContent) {
+        securedContent.style.display = 'block';
+      }
+    }
+
+    (function waitForPortalAuth() {
+      if (
+        sessionStorage.getItem('portalApproved') === 'true'
+      ) {
+        startContractAppAfterGoogleAuth();
+        return;
+      }
+
+      if (window.CURRENT_PORTAL_USER) {
+        sessionStorage.setItem(
+          'portalApproved',
+          'true'
+        );
+
+        startContractAppAfterGoogleAuth();
+        return;
+      }
+
+      window.setTimeout(waitForPortalAuth, 200);
+    })();
 
     function bindEvents() {
       document.getElementById('searchInput').addEventListener('input', applyFilters);
@@ -1108,6 +1275,10 @@ table {
     }
 
     function refreshData() {
+      if (!CONTRACT_APP_UNLOCKED) {
+        return;
+      }
+
       loadData(true);
     }
 
@@ -1452,5 +1623,14 @@ function statusBadge(status) {
         `<div class="empty">${escapeHtml(message)}</div>`;
     }
   </script>
+
+  <script
+    src="https://accounts.google.com/gsi/client"
+    async
+    defer
+  ></script>
+  <script src="https://bomi87.github.io/SK-Aviation-portal/common-auth.js"></script>
+  </div>
+  </div>
 </body>
 </html>
