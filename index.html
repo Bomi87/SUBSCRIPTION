@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>항공본부 계약현황</title>
 
   <style>
@@ -598,7 +598,73 @@ table {
       }
     }
 
+
     @media (max-width: 700px) {
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        min-width: 0;
+      }
+
+      input,
+      select,
+      button {
+        font-size: 16px;
+      }
+
+      header,
+      main,
+      .header-inner,
+      .layout,
+      .panel,
+      .side-panel,
+      .description-panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .summary-card:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .table-wrap,
+      .description-table-wrap {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .contract-table,
+      .description-table {
+        min-width: 980px;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-box {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 14px;
+      }
+
+      .modal-body {
+        padding: 14px;
+      }
       header {
         padding: 15px 14px;
       }
