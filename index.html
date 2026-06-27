@@ -1270,19 +1270,7 @@ table {
     }
 
     (function waitForPortalAuth() {
-      if (
-        sessionStorage.getItem('portalApproved') === 'true'
-      ) {
-        startContractAppAfterGoogleAuth();
-        return;
-      }
-
       if (window.CURRENT_PORTAL_USER) {
-        sessionStorage.setItem(
-          'portalApproved',
-          'true'
-        );
-
         startContractAppAfterGoogleAuth();
         return;
       }
